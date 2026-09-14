@@ -1,8 +1,8 @@
-import React from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
+import EditorPage from './pages/EditorPage';
 
 function App() {
     return (
@@ -24,12 +24,7 @@ function App() {
                     <Route path="/" element={<Home />}></Route>
                     <Route
                         path="/editor/:roomId"
-                        element={
-                            <div className="stage2Notice">
-                                <h2>Editor Page (Stage 2)</h2>
-                                <p>Real-time collaborative editor & socket connection will be implemented in Stage 2.</p>
-                            </div>
-                        }
+                        element={<EditorPage />}
                     ></Route>
                 </Routes>
             </BrowserRouter>

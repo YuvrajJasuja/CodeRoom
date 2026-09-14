@@ -81,7 +81,6 @@ footer a {
     text-decoration: none;
     border-bottom: 1px solid #4aed88;
     transition: all 0.3s ease-in-out;
-    cursor: pointer;
 }
 
 .createNewBtn:hover,
@@ -102,7 +101,6 @@ footer a:hover {
     display: flex;
     flex-direction: column;
 }
-
 .asideInner {
     flex: 1;
 }
@@ -120,7 +118,6 @@ footer a:hover {
     flex-direction: column;
     font-weight: bold;
 }
-
 .userName {
     margin-top: 10px;
 }
@@ -138,17 +135,9 @@ footer a:hover {
     width: 100%;
     margin-top: 20px;
 }
-
-.stage2Notice {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    color: #fff;
-    text-align: center;
-}
-
-.stage2Notice h2 {
-    color: #4aed88;
+.CodeMirror {
+    min-height: calc(100vh - 20px);
+    font-size: 20px;
+    line-height: 1.6;
+    padding-top: 20px;
 }
