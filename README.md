@@ -7,24 +7,35 @@ CodeRoom is a real-time collaborative code editor platform allowing developers a
 ## 📁 Repository Structure
 
 ```
-.
+CodeRoom/
 ├── .github/
-│   └── workflows/                # CI/CD workflows & automated build checks
-├── assets/                       # Diagrams, system flow graphs, and images
-├── code/                         # Application source code
-│   ├── backend/                  # Real-time WebSocket & API backend server
-│   └── frontend/                 # React dynamic frontend interface
-├── docs/                         # MkDocs documentation source files
-├── journals/                     # Individual lab journals & progress logs
-├── project-proposal/             # Project proposal LaTeX source and PDF exports
-├── project-report-final/         # Final milestone report documentation
-├── project-report-prototype-stage/ # Prototype stage evaluation report
-├── .gitignore                    # Git ignore rules
-├── LICENSE                       # Project software license (MIT)
-├── Makefile                      # Command shortcuts for building & running
-├── README.md                     # Main repository documentation
-├── mkdocs.yml                    # MkDocs site configuration
-└── pyproject.toml                # Python environment & tooling dependencies
+│   └── workflows/                       # CI/CD workflows & automated build checks
+├── assets/                              # Architecture diagrams and system flow graphs
+├── code/                                # Full-Stack Application Codebase
+│   ├── backend/                         # Node.js + Express + Socket.IO Backend
+│   │   ├── Actions.js                   # Socket event action definitions
+│   │   ├── server.js                    # Main Express & Socket.IO server entrypoint
+│   │   └── package.json                 # Backend dependencies
+│   └── frontend/                        # React Web App
+│       ├── src/                         # React components, pages & socket logic
+│       ├── public/                      # Static assets & HTML template
+│       └── package.json                 # Frontend dependencies
+├── docs/                                # MkDocs documentation site source
+│   └── index.md                         # Documentation homepage
+├── journals/                            # Team weekly engineering work logs
+│   ├── harwinder.md
+│   └── yuvraj.md
+├── project-proposal/                    # LaTeX Academic Proposal
+│   ├── Main.tex                         # Formal LaTeX Proposal Source
+│   └── proposal_pdf.pdf                 # Compiled Academic Proposal (PDF)
+├── project-report-final/                # Final milestone report documentation
+├── project-report-prototype-stage/      # Prototype stage evaluation report
+├── .gitignore                           # Git ignore rules
+├── LICENSE                              # Project software license (MIT)
+├── Makefile                             # Build automation & script shortcuts
+├── README.md                            # Project master documentation
+├── mkdocs.yml                           # MkDocs site configuration
+└── pyproject.toml                       # Python environment & tooling configuration
 ```
 
 ---
