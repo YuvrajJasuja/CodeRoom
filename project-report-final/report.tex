@@ -1,0 +1,1247 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+% =========================================================
+% PACKAGES
+% =========================================================
+\usepackage[margin=0.9in,top=0.9in,bottom=0.9in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{tikz}
+
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    shapes.geometric,
+    shapes.multipart,
+    calc
+}
+
+% =========================================================
+% COLORS
+% =========================================================
+\definecolor{darkblue}{RGB}{35,75,130}
+\definecolor{lightblue}{RGB}{225,237,250}
+\definecolor{darkgreen}{RGB}{35,110,75}
+\definecolor{lightgreen}{RGB}{225,243,232}
+\definecolor{darkorange}{RGB}{180,100,20}
+\definecolor{lightorange}{RGB}{255,239,215}
+\definecolor{darkpurple}{RGB}{95,65,145}
+\definecolor{lightpurple}{RGB}{240,232,252}
+\definecolor{darkgray}{RGB}{75,75,75}
+
+% =========================================================
+% CHAPTER AND SECTION SPACING
+% =========================================================
+\titleformat{\chapter}[display]
+  {\normalfont\LARGE\bfseries}
+  {\chaptertitlename\ \thechapter}
+  {4pt}
+  {\LARGE}
+
+\titlespacing*{\chapter}{0pt}{-25pt}{15pt}
+\titlespacing*{\section}{0pt}{10pt}{5pt}
+\titlespacing*{\subsection}{0pt}{7pt}{3pt}
+
+% =========================================================
+% HEADER AND FOOTER
+% =========================================================
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+
+\fancyhead[L]{\small\sffamily UCS503 -- Software Engineering Project}
+\fancyhead[R]{\small\sffamily CodeRoom Prototype Report}
+\fancyfoot[C]{\thepage}
+
+\renewcommand{\headrulewidth}{0.4pt}
+
+% =========================================================
+% HYPERREF
+% =========================================================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkblue,
+    citecolor=darkgreen,
+    urlcolor=darkblue,
+    pdftitle={CodeRoom - Real-Time Collaborative Code Editor}
+}
+
+% =========================================================
+% TIKZ STYLES
+% Simple styles to avoid PGF key errors
+% =========================================================
+\tikzset{
+
+    process/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=darkblue,
+        line width=0.8pt,
+        fill=lightblue,
+        minimum width=3.5cm,
+        minimum height=0.85cm,
+        align=center,
+        font=\sffamily\footnotesize
+    },
+
+    processgreen/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=darkgreen,
+        line width=0.8pt,
+        fill=lightgreen,
+        minimum width=3.5cm,
+        minimum height=0.85cm,
+        align=center,
+        font=\sffamily\footnotesize
+    },
+
+    processorange/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=darkorange,
+        line width=0.8pt,
+        fill=lightorange,
+        minimum width=3.5cm,
+        minimum height=0.85cm,
+        align=center,
+        font=\sffamily\footnotesize
+    },
+
+    processpurple/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=darkpurple,
+        line width=0.8pt,
+        fill=lightpurple,
+        minimum width=3.5cm,
+        minimum height=0.85cm,
+        align=center,
+        font=\sffamily\footnotesize
+    },
+
+    entity/.style={
+        rectangle,
+        draw=darkpurple,
+        line width=0.8pt,
+        fill=lightpurple,
+        minimum width=3.0cm,
+        minimum height=0.85cm,
+        align=center,
+        font=\sffamily\footnotesize
+    },
+
+    datastore/.style={
+        rectangle,
+        draw=darkgreen,
+        line width=0.8pt,
+        fill=lightgreen,
+        minimum width=3.6cm,
+        minimum height=0.85cm,
+        align=center,
+        font=\sffamily\footnotesize
+    },
+
+    arrow/.style={
+        -{Stealth[length=2.5mm]},
+        line width=0.8pt,
+        draw=black!80
+    },
+
+    dashedarrow/.style={
+        dashed,
+        -{Stealth[length=2.5mm]},
+        line width=0.8pt,
+        draw=black!80
+    },
+
+    relation/.style={
+        draw=black!80,
+        line width=0.8pt
+    }
+}
+
+% =========================================================
+% DOCUMENT
+% =========================================================
+\begin{document}
+
+% =========================================================
+% TITLE PAGE
+% =========================================================
+\begin{titlepage}
+    \centering
+
+    \vspace*{0.5cm}
+
+    {\Large\bfseries UCS503 -- Software Engineering Project\par}
+    \vspace{0.3cm}
+
+    {\large Academic Year 2026--2027\par}
+    \vspace{1.5cm}
+
+    {\Huge\bfseries CodeRoom\par}
+    \vspace{0.3cm}
+
+    {\Large\bfseries Real-Time Collaborative Code Editor\par}
+    \vspace{0.5cm}
+
+    {\large
+    A Web-Based Platform for Collaborative Coding
+    and Real-Time Code Synchronization\par}
+
+    \vspace{2cm}
+
+    {\large\textbf{Submitted by:}\par}
+    \vspace{0.3cm}
+
+    \begin{tabular}{ll}
+        \textbf{Yuvraj Jasuja} & Team Lead, Full-Stack Architect
+        \\[0.2cm]
+        \textbf{Harwinder Singh} & Frontend Developer and UI/UX Specialist
+    \end{tabular}
+
+    \vspace{0.8cm}
+
+    {\normalsize
+    Bachelor of Engineering in Computer Engineering\par}
+
+    \vspace{1.5cm}
+
+    {\large\textbf{Submitted to:}\par}
+    \vspace{0.2cm}
+
+    {\large\textbf{Department of Computer Science and Engineering}\par}
+
+    \vfill
+
+    {\normalsize\textbf{Mid-Semester Evaluation Report}\par}
+    \vspace{0.2cm}
+
+    {\normalsize
+    Thapar Institute of Engineering and Technology, Patiala\par}
+
+    \vspace{0.3cm}
+
+    {\normalsize 2026--2027\par}
+
+\end{titlepage}
+
+% =========================================================
+% TABLE OF CONTENTS
+% =========================================================
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+
+% =========================================================
+% CHAPTER 1
+% =========================================================
+\chapter{Introduction}
+
+\section{Background and Context}
+
+In modern software development, programmers often work together on the same codebase from different locations. Traditional code editors generally provide an individual coding environment, while collaboration requires external communication tools, file sharing, or version control systems.
+
+These methods can make real-time collaboration difficult. Team members may need to share code manually, wait for updates, or face difficulties while debugging together.
+
+CodeRoom is a web-based real-time collaborative code editor designed to allow multiple users to work on the same code file simultaneously. It provides a shared coding environment where users can create or join coding rooms and synchronize code changes through real-time communication.
+
+The project uses React for the frontend, Node.js and Express.js for the backend, Socket.IO for real-time communication, and CodeMirror for code editing.
+
+\section{Problem Statement}
+
+Traditional code editors do not provide a simple built-in environment for multiple users to edit the same code simultaneously.
+
+The main problems include:
+
+\begin{enumerate}
+    \item Difficulty in sharing code changes instantly.
+    \item Lack of a common real-time coding environment.
+    \item Delays during collaborative debugging.
+    \item Manual sharing of files and code snippets.
+    \item Difficulty in tracking connected collaborators.
+\end{enumerate}
+
+CodeRoom addresses these problems by providing a shared coding room where users can join using a room ID and collaborate through synchronized code editing.
+
+\section{Project Objectives}
+
+The main objectives of CodeRoom are:
+
+\begin{enumerate}
+    \item Develop a real-time collaborative code editor.
+    \item Allow users to create and join coding rooms.
+    \item Synchronize code changes between connected users.
+    \item Display the list of active collaborators.
+    \item Provide a simple and responsive frontend interface.
+    \item Implement real-time communication using Socket.IO.
+    \item Maintain a modular and maintainable full-stack architecture.
+\end{enumerate}
+
+\section{Project Scope}
+
+The current prototype focuses on:
+
+\begin{itemize}
+    \item Room creation and joining.
+    \item Real-time code synchronization.
+    \item CodeMirror editor integration.
+    \item Connected user display.
+    \item Room ID sharing.
+    \item Leaving active coding sessions.
+    \item Basic frontend and backend integration.
+\end{itemize}
+
+Advanced features such as authentication, code execution, persistent code storage, and integrated voice communication may be considered for future development.
+
+% =========================================================
+% CHAPTER 2
+% =========================================================
+\chapter{Methodology and System Design}
+
+\section{Development Methodology}
+
+The project follows an iterative development approach. The system was developed in stages, beginning with project ideation and architecture, followed by environment setup, room management, real-time synchronization, frontend refinement, and testing.
+
+The major development stages were:
+
+\begin{enumerate}
+    \item Project inception and architecture planning.
+    \item GitHub repository and development environment setup.
+    \item Protocol design and project presentation.
+    \item Room management and frontend integration.
+    \item Real-time Socket.IO and CodeMirror integration.
+    \item UI refinement, documentation, and testing.
+\end{enumerate}
+
+\section{System Architecture}
+
+\subsection{High-Level Architecture}
+
+CodeRoom follows a modular client-server architecture. The frontend provides the user interface and code editor, while the backend manages room connections and real-time communication.
+
+The system consists of three main layers:
+
+\begin{enumerate}
+    \item \textbf{Client Interface Layer:} React, Vite, CodeMirror, and frontend components.
+    \item \textbf{Application Logic Layer:} Node.js, Express.js, and Socket.IO.
+    \item \textbf{Data and Session Layer:} Room state, connected users, and synchronized code data.
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=0.65cm]
+
+\node[process, minimum width=8.5cm] (client) {
+    \textbf{Client Interface Layer}\\
+    React + Vite + CodeMirror\\
+    Home Page, Editor, Client List
+};
+
+\node[processgreen, minimum width=8.5cm,
+    below=of client] (server) {
+    \textbf{Application Logic Layer}\\
+    Node.js + Express.js + Socket.IO\\
+    Room Management and Real-Time Events
+};
+
+\node[processorange, minimum width=8.5cm,
+    below=of server] (session) {
+    \textbf{Session and State Layer}\\
+    Room IDs + Connected Users\\
+    Synchronized Code State
+};
+
+\draw[arrow] (client) -- node[right,font=\scriptsize]
+    {HTTP / Socket.IO} (server);
+
+\draw[arrow] (server) -- node[right,font=\scriptsize]
+    {Room State Updates} (session);
+
+\draw[dashedarrow] (session.west) -- ++(-1.5,0)
+    |- node[left,font=\scriptsize,near start]
+    {Sync Code} (client.west);
+
+\end{tikzpicture}
+
+\caption{CodeRoom High-Level System Architecture}
+\label{fig:architecture}
+
+\end{figure}
+
+\subsection{Technical Stack}
+
+The following technologies are used in the CodeRoom prototype:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{4cm}p{8cm}}
+\toprule
+\textbf{Technology} & \textbf{Purpose}\\
+\midrule
+React & Frontend user interface\\
+Vite & Frontend development and build tool\\
+Node.js & Backend runtime\\
+Express.js & HTTP server and API foundation\\
+Socket.IO & Real-time communication\\
+CodeMirror & Code editor component\\
+JavaScript & Application development\\
+CSS & Styling and responsive layout\\
+Git and GitHub & Version control and collaboration\\
+MkDocs & Project documentation\\
+GitHub Actions & Documentation build automation\\
+\bottomrule
+\end{tabular}
+\caption{CodeRoom Technology Stack}
+\label{tab:techstack}
+\end{table}
+
+\section{System Workflow}
+
+The basic workflow of CodeRoom is:
+
+\begin{enumerate}
+    \item The user opens the CodeRoom website.
+    \item The user creates a new room or joins an existing room.
+    \item The frontend connects to the backend using Socket.IO.
+    \item The user enters the shared code editor.
+    \item Code changes are sent to other connected users.
+    \item Other users receive the updated code.
+    \item The active client list is updated when users join or leave.
+\end{enumerate}
+
+% =========================================================
+% CHAPTER 3
+% =========================================================
+\chapter{Data Flow Diagrams}
+
+\section{Introduction to DFD}
+
+A Data Flow Diagram (DFD) represents how data moves through a system. It shows external entities, processes, data stores, and the flow of information.
+
+CodeRoom uses DFDs to describe the interaction between users, the collaborative editor, room management, and real-time synchronization.
+
+\section{DFD Level 0 -- Context Diagram}
+
+At Level 0, CodeRoom is represented as a single system process. The diagram shows the external users and the information exchanged with the system.
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=2.5cm]
+
+\node[entity] (user1) {User 1};
+
+\node[processpurple, minimum width=4.2cm,
+    right=of user1] (system) {
+    \textbf{0}\\
+    \textbf{CodeRoom}\\
+    Real-Time Collaborative\\
+    Code Editor
+};
+
+\node[entity, right=of system] (user2) {User 2};
+
+\draw[arrow] (user1) -- node[above,font=\scriptsize,align=center]
+    {Join Room, Code Changes} (system);
+
+\draw[arrow] (system) -- node[below,font=\scriptsize,align=center]
+    {Synced Code, Room Updates} (user1);
+
+\draw[arrow] (user2) -- node[above,font=\scriptsize,align=center]
+    {Join Room, Code Changes} (system);
+
+\draw[arrow] (system) -- node[below,font=\scriptsize,align=center]
+    {Synced Code, Room Updates} (user2);
+
+\end{tikzpicture}
+
+\caption{CodeRoom DFD Level 0 -- Context Diagram}
+\label{fig:dfd0}
+
+\end{figure}
+
+\section{DFD Level 1 -- Main Processes}
+
+Level 1 divides CodeRoom into its main processes. It shows how users interact with the room management process and the real-time synchronization process.
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=1.25cm and 1.6cm]
+
+\node[entity] (user) {User};
+
+\node[process, right=of user] (room) {
+    \textbf{1.0}\\
+    Room Management
+};
+
+\node[processgreen, right=of room] (sync) {
+    \textbf{2.0}\\
+    Code Synchronization
+};
+
+\node[datastore, below=of room] (state) {
+    \textbf{D1}\\
+    Room State
+};
+
+\node[entity, right=of sync] (clients) {
+    Connected\\
+    Users
+};
+
+\draw[arrow] (user) -- node[above,font=\scriptsize]
+    {Room ID} (room);
+
+\draw[arrow] (room) -- node[above,font=\scriptsize]
+    {Room Connection} (sync);
+
+\draw[arrow] (sync) -- node[above,font=\scriptsize]
+    {Updated Code} (clients);
+
+\draw[arrow] (clients) -- node[below,font=\scriptsize]
+    {Code Changes} (sync);
+
+\draw[arrow] (room) -- node[left,font=\scriptsize]
+    {Room Data} (state);
+
+\draw[dashedarrow] (state) -- node[right,font=\scriptsize]
+    {Room Information} (sync);
+
+\end{tikzpicture}
+
+\caption{CodeRoom DFD Level 1}
+\label{fig:dfd1}
+
+\end{figure}
+
+\section{DFD Level 2 -- Code Synchronization}
+
+The code synchronization process can be further divided into smaller processes.
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=0.9cm and 1.4cm]
+
+\node[process, minimum width=3.3cm] (input) {
+    \textbf{2.1}\\
+    Receive Code Change
+};
+
+\node[processgreen, minimum width=3.3cm,
+    right=of input] (broadcast) {
+    \textbf{2.2}\\
+    Broadcast Update
+};
+
+\node[processorange, minimum width=3.3cm,
+    right=of broadcast] (update) {
+    \textbf{2.3}\\
+    Update Editor State
+};
+
+\node[datastore, minimum width=3.3cm,
+    below=of broadcast] (roomstate) {
+    \textbf{D1}\\
+    Room State
+};
+
+\draw[arrow] (input) -- node[above,font=\scriptsize]
+    {CODE\_CHANGE} (broadcast);
+
+\draw[arrow] (broadcast) -- node[above,font=\scriptsize]
+    {SYNC\_CODE} (update);
+
+\draw[arrow] (broadcast) -- node[right,font=\scriptsize]
+    {Room Data} (roomstate);
+
+\draw[dashedarrow] (roomstate) -- node[left,font=\scriptsize]
+    {Current Code} (input);
+
+\end{tikzpicture}
+
+\caption{CodeRoom DFD Level 2 -- Code Synchronization}
+\label{fig:dfd2}
+
+\end{figure}
+
+% =========================================================
+% CHAPTER 4
+% =========================================================
+\chapter{Entity Relationship Diagram}
+
+\section{Introduction}
+
+An Entity Relationship Diagram (ERD) represents the entities of a system and the relationships between them.
+
+For the CodeRoom prototype, the main entities are User, Room, and Code Session. The diagram models the logical data required for collaborative coding.
+
+\section{Entities and Attributes}
+
+\subsection{User}
+
+The User entity represents a participant in the collaborative coding environment.
+
+Attributes:
+
+\begin{itemize}
+    \item User ID -- Primary Key
+    \item Display Name
+    \item Socket ID
+\end{itemize}
+
+\subsection{Room}
+
+The Room entity represents a shared coding workspace.
+
+Attributes:
+
+\begin{itemize}
+    \item Room ID -- Primary Key
+    \item Room Name
+    \item Created At
+\end{itemize}
+
+\subsection{Code Session}
+
+The Code Session entity represents the shared coding state of a room.
+
+Attributes:
+
+\begin{itemize}
+    \item Session ID -- Primary Key
+    \item Room ID -- Foreign Key
+    \item Source Code
+    \item Language
+    \item Last Updated
+\end{itemize}
+
+\section{ER Diagram}
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=1.7cm and 2.1cm]
+
+\node[entity, text width=3.1cm] (user) {
+    \textbf{USER}\\[3pt]
+    \rule{2.6cm}{0.4pt}\\[-2pt]
+    \scriptsize
+    PK: User ID\\
+    Display Name\\
+    Socket ID
+};
+
+\node[entity, text width=3.1cm,
+    right=of user] (room) {
+    \textbf{ROOM}\\[3pt]
+    \rule{2.6cm}{0.4pt}\\[-2pt]
+    \scriptsize
+    PK: Room ID\\
+    Room Name\\
+    Created At
+};
+
+\node[entity, text width=3.1cm,
+    below=of room] (session) {
+    \textbf{CODE SESSION}\\[3pt]
+    \rule{2.6cm}{0.4pt}\\[-2pt]
+    \scriptsize
+    PK: Session ID\\
+    FK: Room ID\\
+    Source Code\\
+    Language\\
+    Last Updated
+};
+
+\draw[relation] (user) -- node[above,font=\scriptsize]
+    {joins} (room);
+
+\draw[relation] (room) -- node[right,font=\scriptsize]
+    {contains} (session);
+
+\draw[relation] (session.west) -- ++(-1.5,0)
+    |- node[left,font=\scriptsize,near start]
+    {associated with} (user.south);
+
+\end{tikzpicture}
+
+\caption{CodeRoom Entity Relationship Diagram}
+\label{fig:erd}
+
+\end{figure}
+
+\section{Relationship Description}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{3.5cm}p{3cm}p{5cm}}
+\toprule
+\textbf{Relationship} & \textbf{Type} & \textbf{Description}\\
+\midrule
+User -- Room & Many-to-Many (logical) &
+Multiple users can join a room, and a user may join multiple rooms.\\
+Room -- Code Session & One-to-One (logical) &
+A room maintains its shared coding session in the prototype model.\\
+User -- Code Session & Participates &
+Users participate in coding sessions through their room connection.\\
+\bottomrule
+\end{tabular}
+\caption{CodeRoom Entity Relationships}
+\label{tab:relationships}
+\end{table}
+
+\textbf{Note:} The current prototype primarily manages room and client state through Socket.IO. The ER diagram represents the logical data model for the collaborative editor and can be implemented using persistent storage in a future version.
+
+% =========================================================
+% CHAPTER 5
+% =========================================================
+\chapter{Implementation and Module Design}
+
+\section{Module 1: Room Management}
+
+The Room Management module allows users to create or join a coding room.
+
+The module performs the following operations:
+
+\begin{enumerate}
+    \item Generate a unique room ID.
+    \item Accept an invitation code from a user.
+    \item Navigate users to the editor route.
+    \item Connect the user to the room using Socket.IO.
+    \item Display notifications for invalid room input.
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=0.7cm and 1.1cm]
+
+\node[process, minimum width=3.2cm] (start) {
+    Open CodeRoom
+};
+
+\node[process, minimum width=3.2cm,
+    right=of start] (choice) {
+    Create or Join Room
+};
+
+\node[processgreen, minimum width=3.2cm,
+    right=of choice] (id) {
+    Generate / Enter\\
+    Room ID
+};
+
+\node[processorange, minimum width=3.2cm,
+    below=of id] (connect) {
+    Connect to Room
+};
+
+\node[processpurple, minimum width=3.2cm,
+    left=of connect] (editor) {
+    Open Shared Editor
+};
+
+\draw[arrow] (start) -- (choice);
+\draw[arrow] (choice) -- (id);
+\draw[arrow] (id) -- (connect);
+\draw[arrow] (connect) -- (editor);
+
+\end{tikzpicture}
+
+\caption{Room Management Flow}
+\label{fig:roomflow}
+
+\end{figure}
+
+\section{Module 2: Real-Time Code Synchronization}
+
+The Real-Time Code Synchronization module is the core component of CodeRoom. It allows users to share code changes with other connected clients.
+
+The module uses Socket.IO events:
+
+\begin{itemize}
+    \item \texttt{JOIN} -- Request to join a room.
+    \item \texttt{JOINED} -- Confirmation of successful room joining.
+    \item \texttt{CODE\_CHANGE} -- Sends updated code.
+    \item \texttt{SYNC\_CODE} -- Receives synchronized code.
+    \item \texttt{DISCONNECTED} -- Handles user disconnection.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=0.8cm and 1.4cm]
+
+\node[process, minimum width=3.5cm] (editor) {
+    User Edits Code
+};
+
+\node[processgreen, minimum width=3.5cm,
+    right=of editor] (send) {
+    CODE\_CHANGE
+};
+
+\node[processorange, minimum width=3.5cm,
+    right=of send] (server) {
+    Socket.IO Server
+};
+
+\node[processpurple, minimum width=3.5cm,
+    below=of server] (sync) {
+    SYNC\_CODE
+};
+
+\node[process, minimum width=3.5cm,
+    left=of sync] (other) {
+    Other Client\\
+    Editor Updated
+};
+
+\draw[arrow] (editor) -- (send);
+\draw[arrow] (send) -- (server);
+\draw[arrow] (server) -- (sync);
+\draw[arrow] (sync) -- (other);
+
+\end{tikzpicture}
+
+\caption{Real-Time Code Synchronization Flow}
+\label{fig:syncflow}
+
+\end{figure}
+
+\section{Module 3: Frontend Interface and Client List}
+
+The frontend interface is developed using React and CodeMirror.
+
+The main frontend components include:
+
+\begin{itemize}
+    \item \textbf{Home.js:} Room creation, joining, and input validation.
+    \item \textbf{Editor.js:} CodeMirror editor integration and code changes.
+    \item \textbf{Client.js:} Display of connected user avatars.
+    \item \textbf{App.js:} Main application structure and routing.
+    \item \textbf{App.css and index.css:} Application styling and layout.
+\end{itemize}
+
+The client list is updated whenever a user joins or leaves the room. This provides basic visibility of active collaborators.
+
+\section{Module 4: Documentation and Repository Management}
+
+The project uses GitHub for version control and collaboration.
+
+Documentation and repository activities include:
+
+\begin{itemize}
+    \item Maintaining the project repository.
+    \item Organizing frontend and backend modules.
+    \item Maintaining the README file.
+    \item Preparing project documentation using MkDocs.
+    \item Configuring GitHub Actions for documentation builds.
+    \item Maintaining the project directory structure.
+\end{itemize}
+
+% =========================================================
+% CHAPTER 6
+% =========================================================
+\chapter{Testing and Evaluation}
+
+\section{Testing Methodology}
+
+Testing was performed to verify the correctness of the CodeRoom prototype. The testing process focused on frontend functionality, backend communication, room management, and real-time code synchronization.
+
+\subsection{Unit Testing}
+
+Unit testing focuses on individual components and functions.
+
+The following components were considered:
+
+\begin{itemize}
+    \item Room ID generation.
+    \item Room joining validation.
+    \item Frontend input handling.
+    \item Code editor event handling.
+    \item Client list rendering.
+\end{itemize}
+
+\subsection{Integration Testing}
+
+Integration testing verifies communication between the frontend and backend.
+
+The following interactions were tested:
+
+\begin{itemize}
+    \item React frontend with Express backend.
+    \item Socket.IO client and server communication.
+    \item Room joining and connection events.
+    \item Code changes between multiple clients.
+    \item Client connection and disconnection updates.
+\end{itemize}
+
+\subsection{System Testing}
+
+System testing verifies the complete application workflow.
+
+The following scenarios were considered:
+
+\begin{itemize}
+    \item Creating a coding room.
+    \item Joining a room using a room ID.
+    \item Editing code in the shared editor.
+    \item Synchronizing code with another browser client.
+    \item Displaying connected collaborators.
+    \item Leaving a coding session.
+\end{itemize}
+
+\section{Testing Results}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{5.5cm}p{3cm}p{3cm}}
+\toprule
+\textbf{Test Case} & \textbf{Expected Result} & \textbf{Status}\\
+\midrule
+Create Room & Unique room is generated & Passed\\
+Join Room & User enters selected room & Passed\\
+Room ID Validation & Invalid input is handled & Passed\\
+Socket Connection & Client connects to server & Passed\\
+Code Synchronization & Code updates are shared & Passed\\
+Client List Update & Active users are displayed & Passed\\
+User Disconnection & Client list is updated & Passed\\
+Room ID Copy & Room ID can be copied & Passed\\
+Responsive UI & Layout adapts to screen size & Passed\\
+\bottomrule
+\end{tabular}
+\caption{CodeRoom Testing Results}
+\label{tab:testing}
+\end{table}
+
+\section{Testing Framework}
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=0.8cm and 1.3cm]
+
+\node[process, minimum width=3.5cm] (unit) {
+    Unit Testing
+};
+
+\node[processgreen, minimum width=3.5cm,
+    right=of unit] (integration) {
+    Integration Testing
+};
+
+\node[processorange, minimum width=3.5cm,
+    right=of integration] (system) {
+    System Testing
+};
+
+\node[processpurple, minimum width=6cm,
+    below=of integration] (result) {
+    Testing and Validation
+};
+
+\draw[arrow] (unit) -- (result);
+\draw[arrow] (integration) -- (result);
+\draw[arrow] (system) -- (result);
+
+\end{tikzpicture}
+
+\caption{CodeRoom Testing and Evaluation Framework}
+\label{fig:testingflow}
+
+\end{figure}
+
+\section{Limitations}
+
+The current prototype has the following limitations:
+
+\begin{enumerate}
+    \item Code sessions are primarily managed through real-time room state.
+    \item Persistent code storage is not included in the current prototype.
+    \item Authentication and role-based access are not fully implemented.
+    \item The editor currently focuses on JavaScript coding.
+    \item Conflict resolution for simultaneous edits is limited.
+    \item Automated code execution is outside the current scope.
+\end{enumerate}
+
+% =========================================================
+% CHAPTER 7
+% =========================================================
+\chapter{Weekly Progress Journal}
+
+\section{Weekly Progress Journal -- Yuvraj Jasuja}
+
+\subsection*{Week 1: August 3 -- August 9}
+
+\textbf{Project Inception and Architecture}
+
+\begin{itemize}
+    \item Formed the team for the UCS503 Software Engineering project.
+    \item Brainstormed and finalized CodeRoom as the project topic.
+    \item Researched the MERN stack and real-time communication technologies.
+    \item Planned the synchronization logic and UI architecture.
+\end{itemize}
+
+\subsection*{Week 2: August 10 -- August 16}
+
+\textbf{Git Setup and Project Environment}
+
+\begin{itemize}
+    \item Initialized the GitHub repository.
+    \item Established frontend and backend development environments.
+    \item Configured the Express.js server foundation.
+    \item Set up HTTP and Socket.IO server communication.
+    \item Verified backend connectivity.
+\end{itemize}
+
+\subsection*{Week 3: August 17 -- August 23}
+
+\textbf{Protocol Design and Pitch Presentation}
+
+\begin{itemize}
+    \item Defined real-time events such as \texttt{JOIN},
+    \texttt{JOINED}, \texttt{CODE\_CHANGE}, and
+    \texttt{SYNC\_CODE}.
+    \item Contributed to the project pitch presentation.
+    \item Planned the real-time code synchronization MVP.
+    \item Configured the MkDocs documentation environment.
+    \item Set up the GitHub Actions documentation pipeline.
+\end{itemize}
+
+\subsection*{Week 4: August 24 -- August 30}
+
+\textbf{Room Management and Frontend Integration}
+
+\begin{itemize}
+    \item Built the initial frontend architecture.
+    \item Implemented room creation using UUID.
+    \item Implemented invitation code joining.
+    \item Added toast notifications.
+    \item Developed room routing using \texttt{/editor/:roomId}.
+    \item Managed repository operations and .gitignore configuration.
+\end{itemize}
+
+\subsection*{Week 5: August 31 -- September 6}
+
+\textbf{Real-Time Socket Engine and CodeMirror}
+
+\begin{itemize}
+    \item Developed the real-time code synchronization engine.
+    \item Integrated Socket.IO events for code changes.
+    \item Integrated CodeMirror with JavaScript language mode.
+    \item Implemented client connection and disconnection broadcasts.
+    \item Added room ID copying functionality.
+    \item Resolved repository merge conflicts.
+\end{itemize}
+
+\subsection*{Week 6: September 7 -- September 13}
+
+\textbf{Final Polish and Repository Standardization}
+
+\begin{itemize}
+    \item Restructured the project directory.
+    \item Refined frontend and editor UI components.
+    \item Removed outdated branding and logo references.
+    \item Performed multi-client browser verification.
+    \item Created the project Makefile and pyproject.toml.
+    \item Updated README and MkDocs documentation.
+\end{itemize}
+
+\section{Weekly Progress Journal -- Harwinder Singh}
+
+\subsection*{Week 1: August 3 -- August 9}
+
+\textbf{Project Inception and UI Wireframing}
+
+\begin{itemize}
+    \item Participated in project ideation and requirements gathering.
+    \item Researched frontend libraries for the collaborative editor.
+    \item Studied CodeMirror, react-hot-toast, react-avatar,
+    and react-router-dom.
+    \item Planned the frontend user experience.
+\end{itemize}
+
+\subsection*{Week 2: August 10 -- August 16}
+
+\textbf{React Infrastructure and Styling}
+
+\begin{itemize}
+    \item Set up the React application under the frontend directory.
+    \item Configured required frontend dependencies.
+    \item Designed global CSS theme tokens.
+    \item Implemented font hierarchy and responsive containers.
+    \item Updated the HTML baseline template.
+\end{itemize}
+
+\subsection*{Week 3: August 17 -- August 23}
+
+\textbf{Component Architecture and Layout}
+
+\begin{itemize}
+    \item Created the modular frontend component hierarchy.
+    \item Implemented the Client.js component.
+    \item Designed the sidebar for connected users.
+    \item Added status indicators and action controls.
+    \item Contributed to project presentation and documentation.
+\end{itemize}
+
+\subsection*{Week 4: August 24 -- August 30}
+
+\textbf{Form Validation and UI Interactions}
+
+\begin{itemize}
+    \item Implemented form controls on Home.js.
+    \item Added input validation notifications.
+    \item Implemented Enter key navigation for room joining.
+    \item Tested responsive behavior across screen sizes.
+\end{itemize}
+
+\subsection*{Week 5: August 31 -- September 6}
+
+\textbf{CodeMirror and Client List Integration}
+
+\begin{itemize}
+    \item Developed the Editor.js component.
+    \item Integrated CodeMirror initialization and event handling.
+    \item Connected real-time client list updates.
+    \item Added room ID copying and leave-session controls.
+\end{itemize}
+
+\subsection*{Week 6: September 7 -- September 13}
+
+\textbf{UI Polish and Quality Assurance}
+
+\begin{itemize}
+    \item Removed legacy logo assets.
+    \item Updated the home and editor page styling.
+    \item Performed multi-client browser testing.
+    \item Verified avatar updates and code synchronization.
+    \item Organized project assets and documentation.
+\end{itemize}
+
+% =========================================================
+% CHAPTER 8
+% =========================================================
+\chapter{Conclusion and Future Work}
+
+\section{Summary of Work}
+
+CodeRoom is a real-time collaborative code editor developed as a Software Engineering project. The system provides a shared environment where users can create or join coding rooms and collaborate through synchronized code editing.
+
+During the prototype development phase, the team completed the main system design, frontend structure, room management, real-time Socket.IO communication, and CodeMirror integration.
+
+The project also included documentation, repository organization, and multi-client browser testing.
+
+\section{Key Findings}
+
+\begin{enumerate}
+    \item \textbf{Real-Time Collaboration:}
+    Socket.IO enables communication between connected users and supports code synchronization.
+
+    \item \textbf{Modular Frontend:}
+    React components provide a structured and maintainable frontend.
+
+    \item \textbf{Room-Based Architecture:}
+    Room IDs allow users to enter a shared coding environment.
+
+    \item \textbf{Improved Code Sharing:}
+    Users can collaborate without manually exchanging code files.
+
+    \item \textbf{Documentation and Version Control:}
+    GitHub and MkDocs support project collaboration and documentation.
+\end{enumerate}
+
+\section{Future Work}
+
+The following features may be implemented in the final phase:
+
+\begin{enumerate}
+    \item User authentication and authorization.
+    \item Persistent storage of coding sessions.
+    \item Support for multiple programming languages.
+    \item Integrated code execution.
+    \item Improved simultaneous editing conflict handling.
+    \item Cursor and selection sharing.
+    \item Chat functionality inside coding rooms.
+    \item Deployment on a cloud platform.
+    \item Improved security and room access control.
+\end{enumerate}
+
+\section{Final Remarks}
+
+CodeRoom demonstrates the application of full-stack development and real-time communication in collaborative software engineering.
+
+The current prototype establishes the basic foundation for a shared coding environment. Future development can extend the system with persistent storage, authentication, advanced editing capabilities, and integrated development tools.
+
+% =========================================================
+% REFERENCES
+% =========================================================
+\begin{thebibliography}{99}
+
+\bibitem{react}
+Meta Platforms, Inc.,
+\textit{React Documentation}.
+Available at:
+\url{https://react.dev/learn}
+
+\bibitem{nodejs}
+OpenJS Foundation,
+\textit{Node.js Documentation}.
+Available at:
+\url{https://nodejs.org/docs/latest/api/}
+
+\bibitem{express}
+Express.js,
+\textit{Express.js Documentation}.
+Available at:
+\url{https://expressjs.com/}
+
+\bibitem{socketio}
+Socket.IO,
+\textit{Socket.IO Documentation}.
+Available at:
+\url{https://socket.io/docs/v4/}
+
+\bibitem{codemirror}
+CodeMirror,
+\textit{CodeMirror Documentation}.
+Available at:
+\url{https://codemirror.net/}
+
+\bibitem{vite}
+Vite Team,
+\textit{Vite Documentation}.
+Available at:
+\url{https://vite.dev/guide/}
+
+\bibitem{github}
+GitHub,
+\textit{GitHub Documentation}.
+Available at:
+\url{https://docs.github.com/}
+
+\end{thebibliography}
+
+\end{document}
