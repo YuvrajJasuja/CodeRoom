@@ -24,6 +24,7 @@ theme:
 
 nav:
   - Overview: index.md
+  - Timeline & Gantt Chart: timeline.md
   - Architecture: architecture.md
   - Proposal: proposal.md
   - Journals: journals.md
