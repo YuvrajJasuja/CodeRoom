@@ -1,0 +1,8 @@
+# Exclude node_modules and codebase directories from Jekyll processing
+exclude:
+  - code/
+  - code/frontend/node_modules/
+  - journals/
+  - project-proposal/
+  - project-report-final/
+  - project-report-prototype-stage/
