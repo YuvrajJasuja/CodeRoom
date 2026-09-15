@@ -1,9 +1,9 @@
-# 🏛️ Campus Resource Management: Conflict Resolution System for a University Campus
-### *An Automated Venue Booking, Conflict Detection & Resolution Platform*
+# 💻 CodeRoom: Real-Time Collaborative Code Editor
+### *A Web-Based Dynamic Code Synchronization & Multi-User Peer Programming Platform*
 
-[![Frontend](https://img.shields.io/badge/Frontend-React%20%2F%20Vite-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org/)
+[![Frontend](https://img.shields.io/badge/Frontend-React%20%2F%20CodeMirror-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org/)
 [![Backend](https://img.shields.io/badge/Backend-Node.js%20%2F%20Express-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://expressjs.com/)
-[![Database](https://img.shields.io/badge/Database-MongoDB%20%2F%20Mongoose-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![WebSockets](https://img.shields.io/badge/Real--Time-Socket.IO-010101?style=flat-square&logo=socketdotio&logoColor=white)](https://socket.io/)
 [![Documentation](https://img.shields.io/badge/Docs-MkDocs%20%2F%20LaTeX-008080?style=flat-square)](https://www.mkdocs.org/)
 [![Institution](https://img.shields.io/badge/TIET-UCS503P%20Software%20Engineering-crimson?style=flat-square)](https://www.thapar.edu/)
 
@@ -11,57 +11,53 @@
 
 ## Overview
 
-Campus lecture halls and laboratories are often reallocated for placement activities, orientations, and other institutional events without timely notification to the affected batches and faculty. This results in last-minute class cancellations and inefficient venue reassignment due to the lack of readily available alternatives.
+Collaborative programming is essential for modern software engineering education and developer pair programming. However, traditional workflows often rely on repeatedly sharing source files, pasting code fragments into messaging platforms, or dealing with tedious manual merge conflicts.
 
-The **Conflict Resolution System for a University Campus** is an automated venue booking platform that aims to streamline university workflows and improve learning by reducing the time and effort required to allocate campus resources.
-
-By coupling a **Venue Booking Portal** with an **Automated Conflict Detection Engine**, this system evaluates available rooms against specified constraints, ranks suitable venues, and gracefully resolves double bookings through rule-based recommendations.
+**CodeRoom** is a web-based, real-time collaborative code editor platform that eliminates friction in remote peer coding. By coupling an interactive **CodeMirror Workspace** with a low-latency **Socket.IO Event Engine**, CodeRoom allows multiple users to join a shared coding room via a unique Room ID, see live code changes as they happen, and monitor active room participants through dynamic user avatars.
 
 ---
 
 ## Key Features
 
-- **Venue Booking Portal:** Timetable coordinators submit booking requests specifying required capacity, facilities (projectors, computers, etc.), time slot, and activity type (lecture, placement examination, orientation).
-- **Automated Conflict Detection:** The system dynamically validates requests against existing bookings and generates alerts when resource conflicts or double bookings are detected.
-- **Alternative Venue Recommendation:** For conflicting requests, the system identifies and recommends unoccupied venues that satisfy capacity, resource, and scheduling requirements.
-- **Conflict Resolution Workflow:** Coordinators can review conflicting activities, view expected occupancy and responsible faculty, and select an appropriate action such as relocating or rescheduling a lower-priority activity.
-- **Automated Notifications:** Affected students and faculty are notified immediately when a scheduled activity is relocated, suspended, or modified.
+- **Room-Based Collaboration:** Users can dynamically create a new coding session with a unique UUID or join an existing session via a Room ID.
+- **Real-Time Code Synchronization:** Code edits made by any participant are captured instantly by CodeMirror and broadcast across all connected clients via Socket.IO.
+- **Presence & Avatar Tracking:** Active room members are displayed in real-time on the sidebar using dynamic user avatars (`react-avatar`).
+- **Late-Join State Synchronization:** When a new user joins an ongoing coding session, the server syncs the latest editor state to ensure zero code discrepancy.
+- **User Experience & Feedback:** Includes one-click room ID clipboard copying, toast notification alerts (`react-hot-toast`), and clean room exit actions.
 
 ---
 
 ## System Architecture
 
-The project decouples frontend interaction, backend logic, and database storage across a standard 3-tier web architecture:
+The project decouples frontend interaction, real-time WebSocket communication, and room management across a 3-tier system architecture:
 
 ```mermaid
 flowchart TD
-    subgraph Client["Frontend Dashboard (React / Vite)"]
-        UI["Venue Booking Interface"]
-        ConflictView["Conflict Review & Resolution Panel"]
-        Notifications["Real-Time Student/Faculty Notifications"]
+    subgraph Client["Frontend Dashboard (React / CodeMirror)"]
+        UI["Room Join & Creation Interface"]
+        Editor["CodeMirror Collaborative Editor"]
+        Avatars["Live User Presence & Avatars"]
     end
 
-    subgraph API["Backend API Gateway (Express / Node.js)"]
-        Router["REST Endpoints"]
-        Auth["Role-Based Access Control"]
-        ConflictEngine["Automated Conflict Detection Service"]
-        Recommender["Rule-Based Venue Recommender"]
+    subgraph API["Backend API & Gateway (Node.js / Express)"]
+        Router["Express HTTP Router"]
+        SocketEngine["Socket.IO Server Engine"]
+        RoomMgr["Room & Socket Registry"]
     end
 
-    subgraph Database["Data Layer (MongoDB / Mongoose)"]
-        Users[("Users & Roles")]
-        Rooms[("Rooms & Resource Specs")]
-        Bookings[("Bookings & Allocations")]
-        Conflicts[("Conflict & Resolution History")]
+    subgraph SyncEngine["Real-Time Synchronization Layer"]
+        SyncEvents["CODE_CHANGE & SYNC_CODE Events"]
+        Broadcast["Room-Isolated Broadcasting"]
+        Disconn["Disconnect & Member Handlers"]
     end
 
-    UI & ConflictView --> Router
-    Router --> Auth
-    Router --> ConflictEngine
-    Router --> Recommender
-    ConflictEngine & Recommender --> Rooms & Bookings & Conflicts
-    Router --> Users
-    Recommender --> Notifications
+    UI & Editor & Avatars --> Router
+    Router --> SocketEngine
+    SocketEngine --> RoomMgr
+    RoomMgr --> SyncEvents
+    SyncEvents --> Broadcast
+    Broadcast --> Disconn
+    Broadcast --> Avatars
 ```
 
 ---
@@ -70,39 +66,46 @@ flowchart TD
 
 | Metric | Target Specification | Verification Scope |
 | :--- | :--- | :--- |
-| **Alternative Recommendation Validity** | ≥ 95% | Validates that recommendations satisfy all mandatory constraints and availability. |
-| **Recommendation Proximity** | Minimum Distance | Evaluates distance between original venue and recommended alternative. |
-| **Conflict Resolution Coverage** | High Coverage | Percentage of detected conflicts providing at least one feasible alternative. |
-| **Notification Delivery Rate** | ~ 100% | Successful delivery rate of notification events to affected users. |
+| **Synchronization Latency** | < 100 ms | Validates low-latency delivery of keystroke edits between connected clients. |
+| **Code State Consistency** | 100% | Guarantees that newly joining clients receive the full current state of the code. |
+| **Room Isolation Enforcement** | 100% | Confirms that broadcast events are strictly restricted to members of the specific Room ID. |
+| **Disconnect Broadcast Rate** | ~ 100% | Ensures immediate cleanup and active user avatar list updates upon client disconnection. |
 
 ---
 
 ## Repository Structure
 
 ```text
-ucs503p-202627-Campus_Resource_Management/
-├── assets/                                 # Static themes, logos, and styling
+CodeRoom/
+├── .github/                                # CI/CD workflows & automated build checks
+├── assets/                                 # Architecture diagrams and system flow graphs
 ├── code/                                   # Full-Stack Application Codebase
-│   ├── backend/                            # Node.js Express Backend
-│   │   ├── models/                         # Mongoose schemas (Activity, Room, User)
-│   │   ├── routes/                         # API endpoint handlers
-│   │   ├── index.js                        # Main Express server entrypoint
+│   ├── backend/                            # Node.js + Express + Socket.IO Backend
+│   │   ├── Actions.js                      # Socket event action definitions
+│   │   ├── server.js                       # Main Express & Socket.IO server entrypoint
 │   │   └── package.json                    # Backend dependencies
-│   └── frontend/                           # React + Vite Web App
-│       ├── src/                            # React components & UI logic
-│       ├── public/                         # Static assets
-│       ├── index.html                      # Main HTML template
+│   └── frontend/                           # React Web App with CodeMirror
+│       ├── src/                            # React components, pages & socket logic
+│       ├── public/                         # Static assets & HTML template
 │       └── package.json                    # Frontend dependencies
 ├── docs/                                   # MkDocs documentation site source
-│   ├── Project_Presentation.pdf            # Slide Presentation Deck
-│   ├── UseCaseDiagram.pdf                  # UML Use Case Diagram
-│   └── index.md                            # Documentation homepage
+│   ├── architecture.md                     # System architecture documentation
+│   ├── index.md                            # Documentation homepage
+│   ├── journals.md                         # Log overview
+│   └── proposal.md                         # Proposal overview
 ├── journals/                               # Team weekly engineering work logs
+│   ├── harwinder.md                        # Weekly progress log for Harwinder
+│   └── yuvraj.md                           # Weekly progress log for Yuvraj Jasuja
 ├── project-proposal/                       # LaTeX Academic Proposal
-│   ├── main.pdf                            # Compiled Academic Proposal (PDF)
-│   └── main.tex                            # Formal LaTeX Proposal Source
-├── Makefile                                # Build automation for docs
-├── mkdocs.yml                              # MkDocs configuration
+│   ├── Main.tex                            # Formal LaTeX Proposal Source
+│   └── proposal_pdf.pdf                    # Compiled Academic Proposal (PDF)
+├── project-report-final/                   # Final milestone report documentation
+├── project-report-prototype-stage/         # Prototype stage evaluation report
+├── .gitignore                              # Git ignore rules
+├── LICENSE                                 # Project software license (MIT)
+├── Makefile                                # Build automation & script shortcuts
+├── mkdocs.yml                              # MkDocs site configuration
+├── pyproject.toml                          # Python environment & tooling configuration
 └── README.md                               # Project master documentation
 ```
 
@@ -111,40 +114,43 @@ ucs503p-202627-Campus_Resource_Management/
 ## Getting Started
 
 ### 1. Prerequisites
-- **Node.js**: `v18.0.0` or higher
-- **npm**: `v9.0.0` or higher
-- **Python**: `3.10+` (optional, for compiling MkDocs documentation locally)
-- **MongoDB**: Local instance or MongoDB Atlas cluster
+- **Node.js**: `v16.0.0` or higher
+- **npm**: `v8.0.0` or higher
+- **Python**: `3.9+` (optional, for serving local MkDocs documentation)
 
 ---
 
-### 2. Running the Full-Stack Prototype Locally
+### 2. Running the Full-Stack Application Locally
 
-**Terminal 1: Start Backend API**
+**Terminal 1: Start Backend API & Socket Server**
 ```bash
 cd code/backend
 npm install
 npm run dev
 ```
 
-**Terminal 2: Start Frontend Application**
+**Terminal 2: Start Frontend Web Application**
 ```bash
 cd code/frontend
 npm install
-npm run dev
+npm start
 ```
 
-Once both servers are running, the application will be accessible via your browser.
+Once both servers are running, the application will be accessible via your browser at `http://localhost:3000`.
 
 ---
 
-### 3. Serving the Academic Documentation Site (MkDocs)
+### 3. Serving Academic Documentation (MkDocs)
 
 ```bash
-# Build and serve the documentation locally
+# Serve documentation locally using Makefile shortcut
 make docs
 ```
-Documentation will be accessible at: `http://127.0.0.1:8000/`
+Or run directly using Python:
+```bash
+mkdocs serve
+```
+Documentation site will be accessible at `http://127.0.0.1:8000/`.
 
 ---
 
@@ -152,13 +158,13 @@ Documentation will be accessible at: `http://127.0.0.1:8000/`
 
 This project is developed as part of **UCS503P: Software Engineering Project** at **Thapar Institute of Engineering and Technology (TIET), Patiala** under the supervision of **Dr. Jeelani Asif**.
 
-| Name | Roll Number | Email | Department |
-| :--- | :--- | :--- | :--- |
-| **Yuvraj Jasuja** | `1024030069` | [`yjasuja_be24@thapar.edu`](mailto:yjasuja_be24@thapar.edu) | Computer Engineering |
-| **Harwinder** | `1024030075` | [`harwinder_be24@thapar.edu`](mailto:harwinder_be24@thapar.edu) | Computer Engineering |
+| Name | Roll Number | Email | Department | Role |
+| :--- | :--- | :--- | :--- | :--- |
+| **Yuvraj Jasuja** | `1024030069` | [`yjasuja_be24@thapar.edu`](mailto:yjasuja_be24@thapar.edu) | Computer Engineering | Team Lead, Full-Stack Architect & Git Coordinator |
+| **Harwinder** | `1024030075` | [`harwinder_be24@thapar.edu`](mailto:harwinder_be24@thapar.edu) | Computer Engineering | Frontend Developer & UI/UX Specialist |
 
 ---
 
 <p align="center">
-  <b>Campus Resource Management</b> • Automated Venue Booking & Conflict Resolution • Academic Year 2026-27
+  <b>CodeRoom</b> • Real-Time Collaborative Code Editor • Academic Year 2026-27
 </p>
