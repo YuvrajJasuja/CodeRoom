@@ -154,8 +154,8 @@ This project is developed as part of **UCS503P: Software Engineering Project** a
 
 | Name | Roll Number | Email | Department |
 | :--- | :--- | :--- | :--- |
-| **Arhana Mor** | `1024030773` | [`amor_be24@thapar.edu`](mailto:amor_be24@thapar.edu) | Computer Science & Engineering |
-| **Garv Bansal** | `1024030988` | [`gbansal_be24@thapar.edu`](mailto:gbansal_be24@thapar.edu) | Computer Science & Engineering |
+| **Yuvraj Jasuja** | `1024030069` | [`yjasuja_be24@thapar.edu`](mailto:yjasuja_be24@thapar.edu) | Computer Engineering |
+| **Harwinder** | `1024030075` | [`harwinder_be24@thapar.edu`](mailto:harwinder_be24@thapar.edu) | Computer Engineering |
 
 ---
 
